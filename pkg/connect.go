@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+
+	_ "github.com/lib/pq"
 )
 
 //handles the DB connection logic with the use of some helper functions connectionStringFormat() and driverConnect()
