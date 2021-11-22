@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -22,37 +21,48 @@ func appointmentHandler(w http.ResponseWriter, req *http.Request) {
 	case http.MethodGet:
 		timeSlot := params["time_slot"]
 
-		if len(strings.Split(timeSlot, ",")) != 2 {
-			http.Error(w, "Incorrect time_slot format", http.StatusBadRequest)
+		if validatePathParameter(timeSlot, w) {
+			fmt.Fprint(w, sch.IsTimeSlotAvailable(timeSlot))
+		} else {
 			return
 		}
 
-		fmt.Fprint(w, sch.IsTimeSlotAvailable(timeSlot))
 	case http.MethodPost:
 
 		timeSlot := params["time_slot"]
 
-		if len(strings.Split(timeSlot, ",")) != 2 {
-			http.Error(w, "Incorrect time_slot format", http.StatusBadRequest)
+		if validatePathParameter(timeSlot, w) {
+			fmt.Fprint(w, sch.BookTimeSlot(timeSlot))
+		} else {
 			return
 		}
-
-		fmt.Fprint(w, sch.BookTimeSlot(timeSlot))
 
 	case http.MethodDelete:
 
-		appointmentID := params["id"]
+		timeSlot := params["time_slot"]
 
-		if _, err := strconv.Atoi(appointmentID); err != nil {
-			http.Error(w, "The appointment ID must be a integer", http.StatusBadRequest)
+		if validatePathParameter(timeSlot, w) {
+			fmt.Fprint(w, sch.CancelTimeSlot(timeSlot))
+		} else {
 			return
 		}
-
-		fmt.Fprint(w, sch.CancelTimeSlot(appointmentID))
 
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
+}
+
+func validatePathParameter(timeSlot string, w http.ResponseWriter) bool {
+
+	isValid := false
+
+	if len(strings.Split(timeSlot, ",")) == 2 {
+		isValid = true
+	} else {
+		http.Error(w, "Incorrect time_slot format", http.StatusBadRequest)
+	}
+
+	return isValid
 }

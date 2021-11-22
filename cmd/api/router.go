@@ -10,9 +10,7 @@ func Router() *mux.Router {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/appointment/availability/{time_slot}", appointmentHandler).Methods(http.MethodGet)
-	router.HandleFunc("/appointment/book/{time_slot}", appointmentHandler).Methods(http.MethodPost)
-	router.HandleFunc("/appointment/cancel/{id}", appointmentHandler).Methods(http.MethodDelete)
+	router.HandleFunc("/appointment/{time_slot}", appointmentHandler).Methods(http.MethodGet, http.MethodPost, http.MethodDelete)
 
 	return router
 }
