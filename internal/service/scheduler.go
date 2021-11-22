@@ -42,9 +42,12 @@ func (s *Scheduler) BookTimeSlot(timeSlot string) string {
 	return message
 }
 
-func (s *Scheduler) CancelTimeSlot(appointmentID string) string {
+func (s *Scheduler) CancelTimeSlot(timeSlot string) string {
 
-	message, err := s.dbRepo.CancelAppointment(appointmentID)
+	var appointment db.Appointment
+	appointment.DeriveStartAndEndTimeFromTimeSlot(timeSlot)
+
+	message, err := s.dbRepo.CancelAppointment(&appointment)
 	if err != nil {
 		fmt.Printf("failed to cancel appointment: %v", err)
 	}
