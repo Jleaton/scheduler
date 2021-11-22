@@ -1,55 +1,58 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
-	"github.com/Jleaton/scheduler/internal/db"
 	"github.com/gorilla/mux"
 )
 
-func appointmentAvailabilityHandler(w http.ResponseWriter, req *http.Request) {
-
-	var appointment db.Appointment
-
-	err := json.NewDecoder(req.Body).Decode(&appointment)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
-
-	fmt.Fprint(w, sch.IsTimeSlotAvailable(&appointment))
-}
-
-func bookAppointmentHandler(w http.ResponseWriter, req *http.Request) {
-
-	var appointment db.Appointment
-
-	err := json.NewDecoder(req.Body).Decode(&appointment)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	fmt.Fprint(w, sch.BookTimeSlot(&appointment))
-}
-
-func appointmentCancelHandler(w http.ResponseWriter, req *http.Request) {
+func appointmentHandler(w http.ResponseWriter, req *http.Request) {
 
 	params := mux.Vars(req)
 
 	if len(params) == 0 {
-		http.Error(w, "No ID param provided", http.StatusBadRequest)
+		http.Error(w, "No path param provided", http.StatusBadRequest)
 		return
 	}
 
-	appointmentID := params["id"]
+	switch req.Method {
+	case http.MethodGet:
+		timeSlot := params["time_slot"]
 
-	if _, err := strconv.Atoi(appointmentID); err != nil {
-		http.Error(w, "The appointment ID must be a integer", http.StatusBadRequest)
+		if len(strings.Split(timeSlot, ",")) != 2 {
+			http.Error(w, "Incorrect time_slot format", http.StatusBadRequest)
+			return
+		}
+
+		fmt.Fprint(w, sch.IsTimeSlotAvailable(timeSlot))
+	case http.MethodPost:
+
+		timeSlot := params["time_slot"]
+
+		if len(strings.Split(timeSlot, ",")) != 2 {
+			http.Error(w, "Incorrect time_slot format", http.StatusBadRequest)
+			return
+		}
+
+		fmt.Fprint(w, sch.BookTimeSlot(timeSlot))
+
+	case http.MethodDelete:
+
+		appointmentID := params["id"]
+
+		if _, err := strconv.Atoi(appointmentID); err != nil {
+			http.Error(w, "The appointment ID must be a integer", http.StatusBadRequest)
+			return
+		}
+
+		fmt.Fprint(w, sch.CancelTimeSlot(appointmentID))
+
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	fmt.Fprint(w, sch.CancelTimeSlot(appointmentID))
 }
