@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "c5f01bd2-973b-4adc-a1af-be2d8d127482",
+		"name": "Scheduler",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Book Appointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/appointment/2021-01-02 15:00 +0000 UTC,60",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointment",
+						"2021-01-02 15:00 +0000 UTC,60"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Appointment Availability",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/appointment/2021-01-02 15:00 +0000 UTC,60",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointment",
+						"2021-01-02 15:00 +0000 UTC,60"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Appointment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/appointment/2021-01-02 15:00 +0000 UTC,60",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"appointment",
+						"2021-01-02 15:00 +0000 UTC,60"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
