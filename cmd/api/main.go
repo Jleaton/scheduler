@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/Jleaton/scheduler/internal/db"
 	"github.com/Jleaton/scheduler/internal/service"
@@ -12,7 +14,8 @@ import (
 
 //provides global access of these properties to all files in the main package
 var (
-	sch *service.Scheduler
+	sch       *service.Scheduler
+	errLogger *log.Logger
 )
 
 func envVariable(key string) string {
@@ -32,6 +35,8 @@ func envVariable(key string) string {
 
 func main() {
 
+	errLogger = log.New(os.Stdout, "ERROR", log.Ldate|log.Ltime)
+
 	username := envVariable("USERNAME")
 	password := envVariable("PASSWORD")
 	host := envVariable("HOST")
@@ -40,7 +45,8 @@ func main() {
 
 	conn, err := pkg.DBConnect(username, password, host, dbName, ssl)
 	if err != nil {
-		fmt.Printf("failed to create db connection: %v", err)
+		errLogger.Printf("failed to create db connection: %v", err)
+		return
 	}
 
 	dbRepo := db.New(conn)
