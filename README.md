@@ -8,9 +8,24 @@ An application that allows the checking of availability, booking, and cancelling
 2. Setup your Postgres environment. You can download Postgres client [Here](https://wiki.postgresql.org/wiki/PostgreSQL_Clients)
 3. Import the provided Postman collection from the root application directory for ease of use endpoints
 4. Create a ```.env``` file in the root project directory with the following ```USERNAME, PASSWORD, HOST, DBNAME, SSL```
-5. Navigate to ```internal/db/migrations``` for the migration scripts
-6. Run ```migrate -path . -database "postgres://{USERNAME}:{PASSWORD}@{HOST}:5432/{DBNAME}?sslmode=disable" up```
-7. Run ```go run ./cmd/api``` in the root directory of the application
-8. Use Postman with the imported collection to hit the RESTful endpoints
+5. Install the CLI for [Golang Migrate](https://github.com/golang-migrate/migrate)
+6. Navigate to ```internal/db/migrations``` for the migration scripts
+7. Run ```migrate -path . -database "postgres://{USERNAME}:{PASSWORD}@{HOST}:5432/{DBNAME}?sslmode=disable" up```
+8. Run ```go run ./cmd/api``` in the root directory of the application
+9. Use Postman with the imported collection to hit the RESTful endpoints
+
+
+# Project Structure
+- cmd: contains controller logic to accept and handle RESTful requests
+- internal: contains all application specficic business logic and data layer code
+- pkg: contains all application agnostic code that is reusable
+
+# Stack/Tools
+- Golang
+- Postgres
+- [Golang Migrate](https://github.com/golang-migrate/migrate)
+- [Viper](https://github.com/spf13/viper)
+
+
 
 
