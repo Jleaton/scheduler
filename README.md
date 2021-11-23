@@ -17,12 +17,12 @@ An application that allows the checking of availability, booking, and cancelling
 
 # Project Structure
 - cmd: contains controller logic to accept and handle RESTful requests
-- internal: contains all application specficic business logic and data layer code
+- internal: contains all application specific business logic and data layer code
 - pkg: contains all application agnostic code that is reusable
 
 # Stack/Tools
-- Golang
-- Postgres
+- [Golang](https://go.dev/)
+- [Postgres](https://www.postgresql.org/)
 - [Golang Migrate](https://github.com/golang-migrate/migrate)
 - [Viper](https://github.com/spf13/viper)
 
